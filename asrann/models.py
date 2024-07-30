@@ -90,6 +90,8 @@ class ArchiveMap(models.Model):
 
 class ActiveDataset(models.Model):
     dataset = models.ForeignKey(Dataset, on_delete=models.DO_NOTHING)
+    def __str__(self):
+        return self.dataset.name
 
 class AppConfig(models.Model):
     autoplay = models.BooleanField(default=True)
