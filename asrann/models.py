@@ -66,6 +66,9 @@ class Vote(models.Model):
     added_by = models.ForeignKey(User, on_delete=models.CASCADE)
     vote = models.IntegerField(choices=VoteChoices)
     vote_date = models.DateTimeField("date voted")
+    def __str__(self):
+        user_vote = "UP" if self.vote == 1 else "DOWN"
+        return "Vote " + user_vote + " on " + self.record.audio_file + " by " + self.added_by.username
 
 @receiver(post_save, sender=Vote)
 def update_record_score(sender, instance, created, **kwargs):
