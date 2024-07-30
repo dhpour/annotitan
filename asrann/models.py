@@ -68,7 +68,7 @@ class Vote(models.Model):
     vote_date = models.DateTimeField("date voted")
     def __str__(self):
         user_vote = "UP" if self.vote == 1 else "DOWN"
-        return "Vote " + user_vote + " on " + self.record.audio_file + " by " + self.added_by.username
+        return "Vote " + " on " + self.record.audio_file + " (" + self.record.dataset.name + ") by " + self.added_by.username + ", " + user_vote
 
 @receiver(post_save, sender=Vote)
 def update_record_score(sender, instance, created, **kwargs):
