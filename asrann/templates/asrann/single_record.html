@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block title %}بازبینی: {{ record.transcription }}{% endblock %}
+
+{% block current_dataset %}
+{% if user.is_staff %}
+<a href="/asrann/{{record.dataset.id}}" style="padding-right: 20px;">مجموعه {{ record.dataset.name }}</a>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="page-heading">
+    <h1>بازبینی</h1>
+</div>
+<form action="vote/" method="post">
+    {% csrf_token %}
+<div style=" text-align: center; vertical-align: middle; bottom: 0px;">
+    <div style="border: 3px solid #eee; border-radius: 10px; padding: 20px; display: inline-block; text-align: center; vertical-align: middle; line-height: 90px;" id="card-frame">
+        <h3 class="transcription">{{ record.transcription }}</h3>
+        <audio controls id="player" autoplay dir="rtl">
+            <source src="/asrann/{{record.dataset.id}}/record/{{record.id}}/audio/" type="audio/ogg">
+            <source src="/asrann/{{record.dataset.id}}/record/{{record.id}}/audio/" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio><br />
+        {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+    <div class="vote-now" style="zoom: 125%; line-height: 16px;display: inline-block;">
+        {% if vote == -1 %}
+        <li>
+        <input type="radio" name="vote" id="downvote" value="down" checked onClick="goToNext('reject');this.form.submit();">
+        <label for="downvote" style="border-right: 10px solid #E74C3C; text-align: center;">رد</label>
+        </li>
+        {% else %}
+        <li>
+        <input type="radio" name="vote" id="downvote" value="down" onClick="goToNext('reject');this.form.submit();">
+        <label for="downvote" style="border-right: 10px solid #E74C3C; text-align: center;">رد</label>
+        </li>
+        {% endif %}
+        {% if vote == 1 %}
+        <li>
+        <input type="radio" name="vote" id="upvote" value="up" checked onClick="goToNext('accept');this.form.submit();"/>
+        <label for="upvote" style="border-right: 10px solid #28B463; text-align: center;">قبول</label>
+        </li>
+        {% else %}
+        <li>
+        <input type="radio" name="vote" id="upvote" value="up" onClick="goToNext('accept');this.form.submit();" />
+        <label for="upvote" style="border-right: 10px solid #28B463; text-align: center;" >قبول</label>
+        </li>
+        {% endif %}
+    </div>
+
+</div>
+<!--<div style="float: center;">
+    <a id="prevLink" href="prev/" style="float: right; font-family: Tahoma; font-size: 15px; font-weight: bold;">قبلی</a>
+    <a id="nextLink" href="next/" style="float: left; font-family: Tahoma; font-size: 15px; font-weight: bold;">بعدی</a>
+</div>-->
+</div>
+    <input type="submit" value="Vote" style="display: none;">
+    <script>
+        function goToNext(action){
+            if(action === "accept"){
+                document.getElementById("card-frame").style.borderColor = "#28B463";
+                document.getElementById("card-frame").style.borderWidth = "3px";
+            }else{
+                document.getElementById("card-frame").style.borderColor = "#E74C3C";
+                document.getElementById("card-frame").style.borderWidth = "3px";
+            }
+        }
+        document.addEventListener('keyup', function(event) {
+            switch (event.key) {
+                case "ArrowLeft":
+                    console.log('left');
+                    document.getElementById('nextLink').click()
+                    break;
+                case "ArrowRight":
+                    console.log('right');
+                    document.getElementById('prevLink').click()
+                    break;
+                case "Enter":
+                    console.log('enter');
+                    document.getElementById('upvote').click()
+                    break;
+                case "Escape":
+                    console.log('esc');
+                    document.getElementById('downvote').click()
+                    break;
+                case " ":
+                    console.log('space');
+                    player = document.getElementById('player')
+                    if(player.paused){
+                        player.play()
+                    }
+                    else{
+                        player.pause()
+                    }
+                    break;
+            }
+            
+        });
+    </script>
+</form>
+
+{% endblock %}

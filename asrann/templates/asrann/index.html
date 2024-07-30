@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block title %}
+{% if user.is_staff %}
+دادگان
+{% else %}
+صفحه نخست
+{% endif %}
+{% endblock %}
+
+{% block home %}
+{% if user.is_staff %}
+<a class="active">
+    دادگان
+</a>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+
+{% if user.is_staff %}
+<div class="page-heading">
+    <h1>دادگان</h1>
+</div>
+
+<table class="table table-bordered table-hover" style="width: 80%; margin-right: 50px;">
+    <thead>
+      <tr>
+        <th style="text-align: right;">#</th>
+        <th style="text-align: right;">نام</th>
+        <th style="text-align: right;">نسخه</th>
+        <th style="text-align: right;">پوشه</th>
+        <th style="text-align: right;">تاریخ</th>
+        <th style="text-align: right;">توسط</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for dataset in latest_assigned_datasets %}
+        <tr>
+          <td>{{ forloop.counter0|add:page_obj.start_index }}</td>
+          <td><a href="/asrann/{{ dataset.id }}/">{{ dataset.name }}</a></td>
+          <td>{{ dataset.version }}</td>
+          <td>{{ dataset.data_folder }}</td>
+          <td>{{ dataset.add_date }}</td>
+          <td>{{ dataset.added_by }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  
+  {% if is_paginated %}
+  <div style="">
+    <ul class="pagination" style="flex-direction: row; display: flex;">
+      {% if page_obj.has_previous %}
+        <li><a href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+      {% else %}
+        <li class="disabled"><span>&laquo;</span></li>
+      {% endif %}
+      {% for i in paginator.page_range %}
+        {% if page_obj.number == i %}
+          <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+        {% else %}
+          <li><a href="?page={{ i }}">{{ i }}</a></li>
+        {% endif %}
+      {% endfor %}
+      {% if page_obj.has_next %}
+        <li><a href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+      {% else %}
+        <li class="disabled"><span>&raquo;</span></li>
+      {% endif %}
+    </ul>
+</div>
+  {% endif %}
+{% endif %}
+{% endblock %}
+
+{% block extendsidebar %}
+{% if user.is_staff %}
+{% else %}
+<script>
+    document.getElementById("mySidenav").style.width = "100%";
+    console.log('hi from tlate');
+</script>
+{% endif %}
+{% endblock %}

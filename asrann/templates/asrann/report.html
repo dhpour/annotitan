@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}
+گزارش
+{% endblock %}
+
+{% block report %}
+<a class="active">
+    دادگان
+</a>
+{% endblock %}
+
+{% block content %}
+
+<div class="page-heading">
+    <h1>گزارش</h1>
+</div>
+<div style="text-align: center;">
+    <div style="text-align: right; font-family: Tahoma; font-size: 18px; display: inline-block;">
+        <ul>
+            <li>همه برچسب‌های شما: {{ your_records_count }}</li>
+            {% if user.is_staff %}
+            <li>موموعه دادگان فعال: {{active_dataset}}</li>
+            <li>تعداد رکوردهای مجموعه داده فعال: {{active_dataset_records}}</li>
+            {% for score, c in score_list.items %}
+                <li>تعداد رکورد ها با اسکور {{score}}: {{c}}</li>
+            {% endfor %}
+            {% endif %}
+        </ul>
+    </div>
+</div>
+{% if user.is_staff %}
+
+<table class="table table-bordered table-hover" style="width: 30%; margin-right: 50px;">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th style="text-align: right;">متن</th>
+        <th style="text-align: right;">up</th>
+        <th style="text-align: right;">down</th>
+        <th style="text-align: right;">score</th>
+        <!--<th style="text-align: right;">none</th>-->
+      </tr>
+    </thead>
+    <tbody>
+      {% for vote in group_by_vote %}
+        <tr>
+          <td>{{ forloop.counter0|add:group_by_vote.start_index }}</td>
+          <td>{{ vote.transcription }}</td>
+          {% if vote.up_votes > 0 %}
+            <td style="background: #28B463 ">{{vote.up_votes}}</a></td>
+          {% else %}
+            <td></td>
+          {% endif %}
+          {% if vote.down_votes > 0 %}
+            <td style="background: #E74C3C">{{vote.down_votes}}</td>
+          {% else %}
+            <td></td>
+          {% endif %}
+            <td>{{vote.score}}</td>
+          <!--{% if vote.vote__vote == None %}
+            <td style="background: #ccefee">{{vote.vote_count}}</td>
+          {% else %}
+            <td></td>
+          {% endif %}-->
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+ 
+<div class="pagination"  style="flex-direction: row; display: flex; margin-right: 50px;">
+    <span class="step-links">
+        {% if group_by_vote.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ group_by_vote.previous_page_number }}">قبلی</a>
+        {% endif %}
+
+        <span class="current">
+            صفحه {{ group_by_vote.number }} از {{ group_by_vote.paginator.num_pages }}.
+        </span>
+
+        {% if group_by_vote.has_next %}
+            <a href="?page={{ group_by_vote.next_page_number }}">بعدی</a>
+            <a href="?page={{ group_by_vote.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+
+{% endif %}
+{% endblock %}

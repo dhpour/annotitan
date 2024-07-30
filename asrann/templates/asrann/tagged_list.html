@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}فعالیت‌های شما{% endblock %}
+
+{% block tagged %}
+<a class="active">فعالیت شما</a>
+{% endblock %}
+
+{% block content %}
+<div class="page-heading">
+    <h1>فعالیت شما</h1>
+</div>
+
+<table class="table table-bordered table-hover" style="width: 80%; margin-right: 50px;">
+    <thead>
+      <tr>
+        <th style="text-align: right;">#</th>
+        <th style="text-align: right;">متن</th>
+        <th style="text-align: right;">رای</th>
+        <th style="text-align: right;">مجموعه داده</th>
+        <th style="text-align: right;">تاریخ</th>
+        <th style="text-align: right;">دیدن</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for vote in all_tagged_by_user %}
+        <tr>
+         <td>{{ forloop.counter0|add:page_obj.start_index }}</td>
+          <td>{{ vote.record.transcription }}</td>
+          <td style="background: {% if vote.vote == 1 %} #28B463 {% else %} #E74C3C {% endif %}"></a></td>
+          <td>{{ vote.record.dataset.name }}</td>
+          <td>{{vote.vote_date}}</td>
+          <td><a href="/asrann/{{vote.record.dataset.id}}/record/{{ vote.record.id }}/">دیدن</a></td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  
+   <!--<div>
+    {% if all_tagged_by_user %}
+        تعداد همه آراء ثبت شده شما: {{ all_tagged_by_user|length }}
+    {% else %}
+        No athletes.
+    {% endif %}
+    </div>-->
+
+  {% if is_paginated %}
+  <div class="pagination"  style="flex-direction: row; display: flex; margin-right: 50px;">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ page_obj.previous_page_number }}">قبلی</a>
+        {% endif %}
+
+        <span class="current">
+            صفحه {{ page_obj.number }} از {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">بعدی</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+  {% endif %}
+{% endblock %}
