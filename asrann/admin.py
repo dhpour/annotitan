@@ -13,13 +13,19 @@ class UserCustomInline(admin.StackedInline):
 class UserAdmin(BaseUserAdmin):
     inlines = [UserCustomInline]
 
+class VoteAdmin(admin.ModelAdmin):
+    raw_id_fields = ['record', 'added_by']
+
+class SeenAdmin(admin.ModelAdmin):
+    raw_id_fields = ['record', 'seen_by']
+
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
 
 admin.site.register(Dataset)
 admin.site.register(Record)
-admin.site.register(Vote)
-admin.site.register(Seen)
+admin.site.register(Vote, VoteAdmin)
+admin.site.register(Seen, SeenAdmin)
 admin.site.register(ActiveDataset)
 admin.site.register(AppConfig)
 admin.site.register(ArchiveMap)
