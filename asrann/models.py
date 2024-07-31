@@ -87,6 +87,7 @@ class Seen(models.Model):
 class ArchiveMap(models.Model):
     tar_file = models.SmallIntegerField()
     audio_file = models.CharField(max_length=50)
+    dataset = models.ForeignKey(Dataset, on_delete=models.DO_NOTHING)
 
 class ActiveDataset(models.Model):
     dataset = models.ForeignKey(Dataset, on_delete=models.DO_NOTHING)
