@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Dataset, Record, Vote, ActiveDataset, AppConfig, ArchiveMap, CustomUser
+from .models import Dataset, Record, Vote, ActiveDataset, AppConfig, CustomUser
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
 # Register your models here.
@@ -25,4 +25,3 @@ admin.site.register(Record)
 admin.site.register(Vote, VoteAdmin)
 admin.site.register(ActiveDataset)
 admin.site.register(AppConfig)
-admin.site.register(ArchiveMap)

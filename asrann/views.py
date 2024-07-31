@@ -3,7 +3,7 @@ from datetime import datetime
 from django.views import generic
 # Create your views here.
 from django.http import HttpResponse, HttpResponseRedirect
-from .models import Dataset, Record, Vote, ArchiveMap, ActiveDataset
+from .models import Dataset, Record, Vote, ActiveDataset
 from django.shortcuts import get_object_or_404, render
 from django.db.models import F
 from django.urls import reverse
@@ -147,8 +147,7 @@ def serve_audio_from_tar(request, dataset_pk, pk):
 
     try:
         record = Record.objects.get(id=pk)
-        tar_file = ArchiveMap.objects.get(audio_file=record.audio_file)
-        tar_file_string_name = "clips_" + "{:03d}".format(tar_file.tar_file) + ".tar"
+        tar_file_string_name = "clips_" + "{:03d}".format(record.tar_file) + ".tar"
         dataset_folder = record.dataset.data_folder
         tar_file_path = settings.MEDIA_ROOT + dataset_folder + "/" + tar_file_string_name
         audio_file_name = record.audio_file
