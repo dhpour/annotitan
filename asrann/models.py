@@ -79,11 +79,6 @@ def update_record_score(sender, instance, created, **kwargs):
     print('instance:', record)
     print('score: ', record_score)
 
-class Seen(models.Model):
-    record = models.ForeignKey(Record, on_delete=models.CASCADE)
-    seen_by = models.ForeignKey(User, on_delete=models.DO_NOTHING)
-    count = models.IntegerField(default=0)
-
 class ArchiveMap(models.Model):
     tar_file = models.SmallIntegerField()
     audio_file = models.CharField(max_length=50)
