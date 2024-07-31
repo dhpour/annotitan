@@ -87,7 +87,7 @@ def vote(request, dataset_pk, pk):
     vote = request.POST.get('vote')
     record = get_object_or_404(Record, pk=pk)
     if vote:
-        vote = votes[vote]
+        vote = votes[vote] * request.user.customuser.score_weight
         dt = timezone.now()
         v, created = Vote.objects.update_or_create(
             added_by = request.user,
@@ -218,8 +218,8 @@ def report(request):
             #print(response)
             vote_list = Record.objects.annotate(
                 total_votes=Count('vote'),
-                up_votes=Sum(Case(When(vote__vote=Vote.VoteChoices.up, then=1), default=0, output_field=IntegerField())),
-                down_votes=Sum(Case(When(vote__vote=Vote.VoteChoices.down, then=1), default=0, output_field=IntegerField())),
+                up_votes=Sum(Case(When(vote__vote__gt=0, then=F('vote__vote')), default=0, output_field=IntegerField())),
+                down_votes=Sum(Case(When(vote__vote__lt=0, then=F('vote__vote')*-1), default=0, output_field=IntegerField())),
             ).order_by("-score", "-total_votes")
 
             page = request.GET.get('page', 1)

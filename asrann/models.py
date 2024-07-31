@@ -64,7 +64,7 @@ class Vote(models.Model):
         down = -1
     record = models.ForeignKey(Record, on_delete=models.CASCADE)
     added_by = models.ForeignKey(User, on_delete=models.CASCADE)
-    vote = models.IntegerField(choices=VoteChoices)
+    vote = models.IntegerField(default=0)
     vote_date = models.DateTimeField("date voted")
     def __str__(self):
         user_vote = "UP" if self.vote == 1 else "DOWN"
@@ -96,3 +96,21 @@ class ActiveDataset(models.Model):
 
 class AppConfig(models.Model):
     autoplay = models.BooleanField(default=True)
+
+class CustomUser(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    score_weight = models.IntegerField(default=1)#, blank=False, null=False)
+
+@receiver(post_save, sender=User)
+def update_user_score(sender, instance, created, **kwargs):
+    print('sender:', sender)
+    print('instance:', instance)
+    try:
+        cuser = CustomUser.objects.get(user=instance)
+        print('cuser:', cuser)
+        print('new weight:', cuser.score_weight)
+    except CustomUser.DoesNotExist as e:
+        print('create custom user')
+        print('error: ', e)
+        cuser = CustomUser(user=instance, score_weight=1)
+        cuser.save()
