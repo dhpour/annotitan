@@ -10,9 +10,16 @@
 
 {% block content %}
 <div class="page-heading">
-    <h1>بازبینی</h1>
+    <h1>بازبینی
+        {% if not user.customuser.user_tested %}
+            (تست)
+        {% endif %}
+    </h1>
+    {% if not user.customuser.user_tested %}
+        <span>{{remained_tests}} تست باقی مانده است</span>
+    {% endif %}
 </div>
-<form action="vote/" method="post">
+<form action="vote/" method="post" id="theform">
     {% csrf_token %}
 <div style=" text-align: center; vertical-align: middle; bottom: 0px;">
     <div style="border: 3px solid #eee; border-radius: 10px; padding: 20px; display: inline-block; text-align: center; vertical-align: middle; line-height: 90px;" id="card-frame">
@@ -26,23 +33,23 @@
     <div class="vote-now" style="zoom: 125%; line-height: 16px;display: inline-block;">
         {% if vote == -1 %}
         <li>
-        <input type="radio" name="vote" id="downvote" value="down" checked onClick="goToNext('reject');this.form.submit();">
+        <input type="radio" name="vote" id="downvote" value="down" checked onClick="goToNext('reject');checkVote('reject');">
         <label for="downvote" style="border-right: 10px solid #E74C3C; text-align: center;">رد</label>
         </li>
         {% else %}
         <li>
-        <input type="radio" name="vote" id="downvote" value="down" onClick="goToNext('reject');this.form.submit();">
+        <input type="radio" name="vote" id="downvote" value="down" onClick="goToNext('reject');checkVote('reject');">
         <label for="downvote" style="border-right: 10px solid #E74C3C; text-align: center;">رد</label>
         </li>
         {% endif %}
         {% if vote == 1 %}
         <li>
-        <input type="radio" name="vote" id="upvote" value="up" checked onClick="goToNext('accept');this.form.submit();"/>
+        <input type="radio" name="vote" id="upvote" value="up" checked onClick="goToNext('accept');checkVote('accept');"/>
         <label for="upvote" style="border-right: 10px solid #28B463; text-align: center;">قبول</label>
         </li>
         {% else %}
         <li>
-        <input type="radio" name="vote" id="upvote" value="up" onClick="goToNext('accept');this.form.submit();" />
+        <input type="radio" name="vote" id="upvote" value="up" onClick="goToNext('accept');checkVote('accept');" />
         <label for="upvote" style="border-right: 10px solid #28B463; text-align: center;" >قبول</label>
         </li>
         {% endif %}
@@ -56,6 +63,38 @@
 </div>
     <input type="submit" value="Vote" style="display: none;">
     <script>
+
+        {% if not user.customuser.user_tested %}
+            var tested = false;
+            var remained_tests = parseInt("{{remained_tests}}")
+            {% if vote_meter %}
+            var vote_meter = parseInt("{{ vote_meter }}");
+            {% endif %}
+        {% else %}
+            var tested = true;
+        {% endif %}
+
+        function checkVote(v){
+            {% if not user.customuser.user_tested %}
+                if( (v === 'accept' && vote_meter > 0) || (v === 'reject' && vote_meter < 0)){
+                    //alert('Correct selection!')
+                    if (remained_tests === 1){
+                        alert('تبریک!\nمرحله آزمایشی با موفقیت پایان یافت.\nاز اینجا به بعد برچسب‌زنی شروع می‌شود.!');
+                    }
+                    document.getElementById('theform').submit();
+                }
+                else{
+                    //alert('Wrong selection!')
+                    var notification = document.getElementById("notification");
+                    notification.style.display = "block"; // Show the notification
+                    setTimeout(function() {
+                        notification.style.display = "none";
+                    }, 2000);
+                }
+            {% else %}
+                document.getElementById('theform').submit();
+            {% endif %}
+        }
         function goToNext(action){
             if(action === "accept"){
                 document.getElementById("card-frame").style.borderColor = "#28B463";
@@ -77,7 +116,7 @@
                     break;
                 case "Enter":
                     console.log('enter');
-                    document.getElementById('upvote').click()
+                    document.getElementById('upvote').click();
                     break;
                 case "Escape":
                     console.log('esc');
@@ -98,5 +137,7 @@
         });
     </script>
 </form>
-
+<div id="notification" class="notification">
+    گزینه اشتباه انتخاب شده است!
+</div>
 {% endblock %}

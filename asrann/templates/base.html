@@ -198,7 +198,22 @@
     text-decoration: none;
     cursor: pointer;
 }
-
+.notification {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 20px;
+    font-weight: bold;
+    direction: rtl;
+    position: fixed;
+    bottom: 20px; /* Position it at the bottom */
+    left: 50%;
+    transform: translateX(-50%); /* Center it horizontally */
+    background-color: #E74C3C; /* Red background */
+    color: white; /* White text */
+    padding: 10px 20px; /* Padding around the text */
+    border-radius: 5px; /* Rounded corners */
+    display: none; /* Initially hidden */
+    z-index: 1000; /* Make sure it appears above everything */
+}
     </style>
 </head>
 

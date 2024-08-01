@@ -78,6 +78,11 @@ def singleRecord(request, dataset_pk, pk):
         "audio_file": record.audio_file,
         "static": False
     }
+    if not user.customuser.user_tested:
+        vote_meter = Vote.objects.filter(record=record).aggregate(Sum('vote'))['vote__sum']
+        context["vote_meter"] = vote_meter
+        context["remained_tests"] = user.customuser.passed_score
+
     return render(request, "asrann/single_record.html", context)
 
 def vote(request, dataset_pk, pk):
@@ -107,25 +112,15 @@ def vote(request, dataset_pk, pk):
         else:
             vote = votes[vote]
             vote_meter = Vote.objects.filter(record=record).aggregate(Sum('vote'))['vote__sum']
-            print('-'*10)
-            print('vote_meter: ', vote_meter)
-            print('new vote: ', vote)
             user_model = User.objects.get(id=user.id)
             passed_score = user_model.customuser.passed_score
-            print('user_passed_score:', passed_score)
 
             if (vote > 0 and vote_meter > 0) or (vote < 0 and vote_meter < 0):
-                print('Right vote!')
-                
                 custom_user = CustomUser.objects.get(user=user_model)
                 if passed_score - 1 <= 0:
                     custom_user.user_tested = True
                 custom_user.passed_score = passed_score - 1
                 custom_user.save()
-
-            else:
-                print('Wrong vote!')
-            print('-'*10)
     return goto_next(request, dataset_pk, pk, record.add_date)
 
 def goto_next(request, dataset_pk, pk, add_date):
