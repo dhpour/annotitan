@@ -91,6 +91,8 @@ class AppConfig(models.Model):
 class CustomUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     score_weight = models.IntegerField(default=1)#, blank=False, null=False)
+    user_tested = models.BooleanField(default=False)
+    passed_score = models.IntegerField(default=10)
 
 @receiver(post_save, sender=User)
 def update_user_score(sender, instance, created, **kwargs):

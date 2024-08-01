@@ -3,7 +3,7 @@ from datetime import datetime
 from django.views import generic
 # Create your views here.
 from django.http import HttpResponse, HttpResponseRedirect
-from .models import Dataset, Record, Vote, ActiveDataset
+from .models import Dataset, Record, Vote, ActiveDataset, CustomUser
 from django.shortcuts import get_object_or_404, render
 from django.db.models import F
 from django.urls import reverse
@@ -19,6 +19,8 @@ from .forms import LoginForm
 from django.contrib.auth.decorators import permission_required
 from django.db.models import Count, Case, When, IntegerField, Sum
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+import random
+from django.contrib.auth.models import User
 
 SCORE_THRESHOLD = 2
 
@@ -86,20 +88,44 @@ def vote(request, dataset_pk, pk):
     }
     vote = request.POST.get('vote')
     record = get_object_or_404(Record, pk=pk)
+    user = request.user
     if vote:
-        vote = votes[vote] * request.user.customuser.score_weight
         dt = timezone.now()
-        v, created = Vote.objects.update_or_create(
-            added_by = request.user,
-            record = record,
-            defaults = {"vote": vote, "vote_date": timezone.now()},
-            create_defaults = {
-                "added_by": request.user,
-                "record": record,
-                "vote": vote,
-                "vote_date": timezone.now()
-            }
-        )
+        if user.customuser.user_tested:
+            vote = votes[vote] * request.user.customuser.score_weight
+            v, created = Vote.objects.update_or_create(
+                added_by = request.user,
+                record = record,
+                defaults = {"vote": vote, "vote_date": timezone.now()},
+                create_defaults = {
+                    "added_by": request.user,
+                    "record": record,
+                    "vote": vote,
+                    "vote_date": timezone.now()
+                }
+            )
+        else:
+            vote = votes[vote]
+            vote_meter = Vote.objects.filter(record=record).aggregate(Sum('vote'))['vote__sum']
+            print('-'*10)
+            print('vote_meter: ', vote_meter)
+            print('new vote: ', vote)
+            user_model = User.objects.get(id=user.id)
+            passed_score = user_model.customuser.passed_score
+            print('user_passed_score:', passed_score)
+
+            if (vote > 0 and vote_meter > 0) or (vote < 0 and vote_meter < 0):
+                print('Right vote!')
+                
+                custom_user = CustomUser.objects.get(user=user_model)
+                if passed_score - 1 <= 0:
+                    custom_user.user_tested = True
+                custom_user.passed_score = passed_score - 1
+                custom_user.save()
+
+            else:
+                print('Wrong vote!')
+            print('-'*10)
     return goto_next(request, dataset_pk, pk, record.add_date)
 
 def goto_next(request, dataset_pk, pk, add_date):
@@ -107,6 +133,10 @@ def goto_next(request, dataset_pk, pk, add_date):
     user = request.user
     try:
         #record = Record.objects.filter(~Q(vote__added_by=user)).filter(add_date__gt=add_date).filter(score__lt=SCORE_THRESHOLD).order_by("-score")
+        if not user.customuser.user_tested:
+            records = Record.objects.filter(score__gte=SCORE_THRESHOLD)
+            record = random.choice(records)
+            return HttpResponseRedirect(reverse("asrann:record", args=(dataset_pk, record.id,)))    
         record = Record.objects.filter(~Q(vote__added_by=user)).filter(score__lt=SCORE_THRESHOLD).order_by("-score")
         return HttpResponseRedirect(reverse("asrann:record", args=(dataset_pk, record[0].id,)))
     except (IndexError, Record.DoesNotExist):
@@ -195,6 +225,11 @@ def tagging(request):
     
     try:
         dataset = get_object_or_404(ActiveDataset)
+        if not request.user.customuser.user_tested:
+            records = Record.objects.filter(score__gte=SCORE_THRESHOLD)
+            record = random.choice(records)
+            return HttpResponseRedirect(reverse("asrann:vote", args=(dataset.dataset.id, record.id)))
+        
         record = Record.objects.filter(~Q(vote__added_by=request.user)).filter(score__lt=SCORE_THRESHOLD).order_by("-score")
         return HttpResponseRedirect(reverse("asrann:vote", args=(dataset.dataset.id, record[0].id)))
     except (IndexError, Record.DoesNotExist, Dataset.DoesNotExist):

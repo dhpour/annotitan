@@ -216,7 +216,11 @@
             {% endif %}
             {% endblock %}
             {% block current_dataset %}{% endblock %}
+            {% if user.customuser.user_tested %}
             <a href="/asrann/tagging/">برچسب زنی</a>
+            {% else %}
+            <a href="/asrann/tagging/">تست برچسب زنی</a>
+            {% endif %}
             <a style="cursor: pointer;" onClick="openModal()">راهنما</a>
             {% block tagged %}
             <a href="/asrann/tagged/">فعالیت شما</a>
