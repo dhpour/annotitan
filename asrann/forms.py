@@ -10,7 +10,7 @@ class LoginForm(forms.Form):
 class RegisterForm(UserCreationForm):
     password1 = forms.CharField(max_length=65, widget=forms.PasswordInput, label="کلمه عبور")
     password2 = forms.CharField(max_length=65, widget=forms.PasswordInput, label="تکرار کلمه")
-    
+    email = forms.EmailField(max_length=200, help_text='Required', label='آدرس ایمیل')  
     class Meta:
         model=User
         #username = forms.CharField(max_length=65, label="نام کاربری")
@@ -19,7 +19,7 @@ class RegisterForm(UserCreationForm):
         fields = ['username','email']
         labels = {
             'username': _('نام کاربری'),
-            'email': _('پست الکترونیک'),
+            #'email': _('پست الکترونیک'),
             #'password1': _('رمز عبور'),
             #'password2': _('تکرار رمز')
         }

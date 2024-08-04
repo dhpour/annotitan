@@ -23,4 +23,6 @@ urlpatterns = [
     path('login/', views.sign_in, name='login'),
     path('register/', views.sign_up, name='register'),
     path('logout/', views.sign_out, name='logout'),
+    path('activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/',  
+        views.activate, name='activate'),  
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
