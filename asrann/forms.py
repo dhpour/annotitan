@@ -24,3 +24,5 @@ class RegisterForm(UserCreationForm):
             #'password2': _('تکرار رمز')
         }
         
+#from https://www.pythontutorial.net/django-tutorial/django-login/
+#from https://www.pythontutorial.net/django-tutorial/django-registration/
