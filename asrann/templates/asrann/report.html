@@ -19,7 +19,7 @@
     <div style="text-align: right; font-family: Tahoma; font-size: 18px; display: inline-block;">
         <ul>
             <li>همه برچسب‌های شما: {{ your_records_count }}</li>
-            {% if user.is_staff %}
+            {% if user.is_staff and first_page %}
             <li>مجموعه همه رکوردها: {{combined_records_count}}</li>
             {% for score, c in distinct_scores_all.items %}
                 <li>تعداد رکورد ها با اسکور {{score}}: {{c}}</li>
