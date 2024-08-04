@@ -17,11 +17,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from dotenv import load_dotenv
+from django.shortcuts import redirect
 import os
 
 load_dotenv()
 
 urlpatterns = [
+    path('', lambda request: redirect('/asrann', permanent=True)),
     path('asrann/', include("asrann.urls")),
     path(os.getenv("ADMIN_ROUTE"), admin.site.urls),
 ]
