@@ -23,7 +23,7 @@ import random
 from django.contrib.auth.models import User
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode 
-from django.core.mail import send_mail  
+from django.core.mail import EmailMessage    
 from .token import account_activation_token  
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
@@ -263,15 +263,14 @@ def sign_up(request):
                 'token':account_activation_token.make_token(user),  
             })  
             to_email = form.cleaned_data.get('email')  
-            email = send_mail(  
+            email = EmailMessage(  
                         mail_subject,
                         message, 
-                        from_email='ravazi.noreply@gmail.com', 
-                        recipient_list=[to_email],
-                        fail_silently=False,
+                        'ravazi.noreply@gmail.com', 
+                        [to_email]
             )
             print('\temail:', message)
-            #email.send()  
+            email.send()  
             #return HttpResponse('Please confirm your email address to complete the registration')
             return HttpResponse("<div style='direction: rtl'><p>ایمیلی برای شما ارسال شده است. برای استفاده از حساب کاربری‌تان  باید ایمیل‌تان را تایید کنید.</p><a href='/asrann'>وارد شوید</a></div>")
         else:
