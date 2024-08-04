@@ -23,7 +23,7 @@ import os
 load_dotenv()
 
 urlpatterns = [
-    path('', lambda request: redirect('/asrann', permanent=True)),
+    path('', lambda request: redirect('asrann/', permanent=True)),
     path('asrann/', include("asrann.urls")),
     path(os.getenv("ADMIN_ROUTE"), admin.site.urls),
 ]
