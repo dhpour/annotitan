@@ -15,7 +15,7 @@ from django.conf import settings
 import tarfile
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
-from .forms import LoginForm
+from .forms import LoginForm, RegisterForm
 from django.contrib.auth.decorators import permission_required
 from django.db.models import Count, Case, When, IntegerField, Sum
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -134,7 +134,7 @@ def goto_next(request, pk, add_date):
         records = Record.objects.filter(~Q(vote__added_by=user)).filter(score__lt=SCORE_THRESHOLD, dataset=active.dataset).order_by("-score")
         return HttpResponseRedirect(reverse("asrann:record", args=(records[0].id,)))
     except (IndexError, Record.DoesNotExist):
-        return HttpResponseRedirect(reverse(""))
+        return redirect('/asrann/')
     
 def goto_prev(request, dataset_pk, pk):
     
@@ -215,6 +215,26 @@ def sign_out(request):
     messages.success(request,f'You have been logged out.')
     return redirect('/asrann/login/')
 
+def sign_up(request):
+    if request.user.is_authenticated:
+        return redirect('/asrann/')
+    
+    if request.method == 'GET':
+        form = RegisterForm()
+        return render(request, 'asrann/register.html', { 'form': form})  
+    
+    if request.method == 'POST':
+        form = RegisterForm(request.POST) 
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.username = user.username.lower()
+            user.save()
+            messages.success(request, 'You have singed up successfully.')
+            login(request, user)
+            return redirect('/asrann/')
+        else:
+            return render(request, 'asrann/register.html', {'form': form})
+        
 def tagging(request):
     
     try:
@@ -227,7 +247,7 @@ def tagging(request):
         records = Record.objects.filter(~Q(vote__added_by=request.user)).filter(score__lt=SCORE_THRESHOLD, dataset=active.dataset).order_by("-score")
         return HttpResponseRedirect(reverse("asrann:vote", args=(records[0].id, )))
     except (IndexError, Record.DoesNotExist, Dataset.DoesNotExist):
-        return HttpResponseRedirect(reverse(""))
+        return redirect('/asrann/')
     
 def report(request):
     try:

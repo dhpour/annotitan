@@ -21,5 +21,6 @@ urlpatterns = [
     path("record/<uuid:pk>/vote/", login_required(views.vote, login_url=LOGIN_URL), name="vote"),    path("tt/", views.test, name="tt"),
     path('record/<uuid:pk>/audio/', login_required(views.serve_audio_from_tar, login_url=LOGIN_URL), name='serve_audio'),
     path('login/', views.sign_in, name='login'),
+    path('register/', views.sign_up, name='register'),
     path('logout/', views.sign_out, name='logout'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}ثبت نام{% endblock %}
+{% block content %}
+<div  style=" text-align: center; vertical-align: middle; bottom: 0px;">
+    <div style="border: 3px solid #eee; border-radius: 10px; padding: 20px; display: inline-block; text-align: center; vertical-align: middle;" id="card-frame">
+        <form method="POST" novalidate>
+            {% csrf_token %}
+            <h2>ثبت نام</h2>
+            {% for field in form %}
+            <p>
+                {% if field.errors %}
+                <ul class="errorlist">
+                    {% for error in field.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                {{ field.label_tag }} {{ field }}
+            </p>
+            {% endfor %}	
+            <input type="submit" value="Register" />
+            <p>حساب کاربری دارید؟ <a href="/asrann/login">وارد شوید </a></p>
+        </form>
+    </div>
+</div>
+{% endblock content%}
