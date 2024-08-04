@@ -7,6 +7,8 @@ from django.dispatch import receiver
 from django.db.models import Sum
 import uuid
 
+User._meta.get_field('email')._unique = True
+
 class Dataset(models.Model):
     id = models.UUIDField( 
          primary_key = True, 
