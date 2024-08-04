@@ -60,13 +60,11 @@ class TaggedView(generic.ListView):
         return Vote.objects.filter(added_by=user)
 
 #@login_required(login_url=LOGIN_URL)
-def singleRecord(request, dataset_pk, pk):
+def singleRecord(request, pk):
     
     user = request.user
     record = get_object_or_404(Record, pk=pk)
     vote = None
-    print('dataset_pk: ', dataset_pk)
-    print('request: ', user)
 
     try:
         vote = Vote.objects.get(record=record, added_by=user).vote
@@ -85,7 +83,7 @@ def singleRecord(request, dataset_pk, pk):
 
     return render(request, "asrann/single_record.html", context)
 
-def vote(request, dataset_pk, pk):
+def vote(request, pk):
     
     votes = {
         'up': 1,
@@ -121,9 +119,9 @@ def vote(request, dataset_pk, pk):
                     custom_user.user_tested = True
                 custom_user.passed_score = passed_score - 1
                 custom_user.save()
-    return goto_next(request, dataset_pk, pk, record.add_date)
+    return goto_next(request, pk, record.add_date)
 
-def goto_next(request, dataset_pk, pk, add_date):
+def goto_next(request, pk, add_date):
     
     user = request.user
     try:
@@ -131,11 +129,11 @@ def goto_next(request, dataset_pk, pk, add_date):
         if not user.customuser.user_tested:
             records = Record.objects.filter(score__gte=SCORE_THRESHOLD)
             record = random.choice(records)
-            return HttpResponseRedirect(reverse("asrann:record", args=(dataset_pk, record.id,)))    
+            return HttpResponseRedirect(reverse("asrann:record", args=(record.id,)))    
         record = Record.objects.filter(~Q(vote__added_by=user)).filter(score__lt=SCORE_THRESHOLD).order_by("-score")
-        return HttpResponseRedirect(reverse("asrann:record", args=(dataset_pk, record[0].id,)))
+        return HttpResponseRedirect(reverse("asrann:record", args=(record[0].id,)))
     except (IndexError, Record.DoesNotExist):
-        return HttpResponseRedirect(reverse("asrann:records", args=(dataset_pk,)))
+        return HttpResponseRedirect(reverse(""))
     
 def goto_prev(request, dataset_pk, pk):
     
@@ -168,7 +166,7 @@ def test(request):
     print("MEDIA_URL: ", settings.MEDIA_ROOT)
     return render(request, "asrann/test.html", {"audio_file": "/asrann/media/0000101109.mp3"})
 
-def serve_audio_from_tar(request, dataset_pk, pk):
+def serve_audio_from_tar(request, pk):
 
     try:
         record = Record.objects.get(id=pk)
@@ -223,12 +221,12 @@ def tagging(request):
         if not request.user.customuser.user_tested:
             records = Record.objects.filter(score__gte=SCORE_THRESHOLD)
             record = random.choice(records)
-            return HttpResponseRedirect(reverse("asrann:vote", args=(dataset.dataset.id, record.id)))
+            return HttpResponseRedirect(reverse("asrann:vote", args=(record.id, )))
         
-        record = Record.objects.filter(~Q(vote__added_by=request.user)).filter(score__lt=SCORE_THRESHOLD).order_by("-score")
-        return HttpResponseRedirect(reverse("asrann:vote", args=(dataset.dataset.id, record[0].id)))
+        records = Record.objects.filter(~Q(vote__added_by=request.user)).filter(score__lt=SCORE_THRESHOLD).order_by("-score")
+        return HttpResponseRedirect(reverse("asrann:vote", args=(records[0].id, )))
     except (IndexError, Record.DoesNotExist, Dataset.DoesNotExist):
-        return HttpResponseRedirect(reverse("asrann:records", args=(dataset.dataset.id,)))
+        return HttpResponseRedirect(reverse("asrann:records", args=(dataset.dataset.id, )))
     
 def report(request):
     try:
