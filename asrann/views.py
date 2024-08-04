@@ -125,13 +125,14 @@ def goto_next(request, pk, add_date):
     
     user = request.user
     try:
+        active = get_object_or_404(ActiveDataset.objects.order_by('?')[:1])
         #record = Record.objects.filter(~Q(vote__added_by=user)).filter(add_date__gt=add_date).filter(score__lt=SCORE_THRESHOLD).order_by("-score")
         if not user.customuser.user_tested:
             records = Record.objects.filter(score__gte=SCORE_THRESHOLD)
             record = random.choice(records)
             return HttpResponseRedirect(reverse("asrann:record", args=(record.id,)))    
-        record = Record.objects.filter(~Q(vote__added_by=user)).filter(score__lt=SCORE_THRESHOLD).order_by("-score")
-        return HttpResponseRedirect(reverse("asrann:record", args=(record[0].id,)))
+        records = Record.objects.filter(~Q(vote__added_by=user)).filter(score__lt=SCORE_THRESHOLD, dataset=active.dataset).order_by("-score")
+        return HttpResponseRedirect(reverse("asrann:record", args=(records[0].id,)))
     except (IndexError, Record.DoesNotExist):
         return HttpResponseRedirect(reverse(""))
     
@@ -217,13 +218,13 @@ def sign_out(request):
 def tagging(request):
     
     try:
-        dataset = get_object_or_404(ActiveDataset)
+        active = get_object_or_404(ActiveDataset.objects.order_by('?')[:1])
         if not request.user.customuser.user_tested:
             records = Record.objects.filter(score__gte=SCORE_THRESHOLD)
             record = random.choice(records)
             return HttpResponseRedirect(reverse("asrann:vote", args=(record.id, )))
         
-        records = Record.objects.filter(~Q(vote__added_by=request.user)).filter(score__lt=SCORE_THRESHOLD).order_by("-score")
+        records = Record.objects.filter(~Q(vote__added_by=request.user)).filter(score__lt=SCORE_THRESHOLD, dataset=active.dataset).order_by("-score")
         return HttpResponseRedirect(reverse("asrann:vote", args=(records[0].id, )))
     except (IndexError, Record.DoesNotExist, Dataset.DoesNotExist):
         return HttpResponseRedirect(reverse(""))
