@@ -233,17 +233,28 @@ def report(request):
     try:
         your_records = Record.objects.filter(vote__added_by=request.user).count()
         if request.user.is_staff:
-            active = ActiveDataset.objects.get()
-            all_recs = Record.objects.filter(dataset=active.dataset).count()
-            score_list = Record.objects.all().values_list(
-                'score', flat = True
-            ).distinct()
-            response = "all records: {all_recs}<br>".format(all_recs=all_recs)
-            distinct_scores = {}
-            for score in score_list:
-                distinct_scores[score] = Record.objects.filter(score=score).count()
-                response += "score {score}: {distinct_score}<br>".format(score=score, distinct_score=distinct_scores[score])
-            #print(response)
+            active_datasets = ActiveDataset.objects.all()
+            distinct_scores_all = {}
+            combined_records = 0
+            datasets_features = []
+            for active in active_datasets:
+                all_recs = Record.objects.filter(dataset=active.dataset).count()
+                combined_records += all_recs
+                score_list = Record.objects.all().values_list(
+                    'score', flat = True
+                ).distinct()
+                response = "all records: {all_recs}<br>".format(all_recs=all_recs)
+                distinct_scores = {}
+                for score in score_list:
+                    distinct_scores[score] = Record.objects.filter(score=score, dataset=active.dataset).count()
+                    distinct_scores_all[score] = distinct_scores_all.get(score, 0) + distinct_scores[score]
+                    response += "score {score}: {distinct_score}<br>".format(score=score, distinct_score=distinct_scores[score])
+                #print(response)
+                datasets_features.append({
+                    'active_dataset': active.dataset.name,
+                    'active_dataset_records': all_recs,
+                    'score_list': distinct_scores
+                })
             vote_list = Record.objects.annotate(
                 total_votes=Count('vote'),
                 up_votes=Sum(Case(When(vote__vote__gt=0, then=F('vote__vote')), default=0, output_field=IntegerField())),
@@ -261,10 +272,10 @@ def report(request):
 
             context = {
                 'your_records_count': your_records,
-                'active_dataset': active.dataset,
-                'active_dataset_records': all_recs,
-                'score_list': distinct_scores,
-                'group_by_vote': vote_list
+                'combined_records_count': combined_records,
+                'distinct_scores_all': distinct_scores_all,
+                'group_by_vote': vote_list,
+                'datasets_features': datasets_features
             }
             return render(request,'asrann/report.html', context)
         

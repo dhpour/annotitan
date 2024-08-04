@@ -20,10 +20,21 @@
         <ul>
             <li>همه برچسب‌های شما: {{ your_records_count }}</li>
             {% if user.is_staff %}
-            <li>موموعه دادگان فعال: {{active_dataset}}</li>
-            <li>تعداد رکوردهای مجموعه داده فعال: {{active_dataset_records}}</li>
-            {% for score, c in score_list.items %}
+            <li>مجموعه همه رکوردها: {{combined_records_count}}</li>
+            {% for score, c in distinct_scores_all.items %}
                 <li>تعداد رکورد ها با اسکور {{score}}: {{c}}</li>
+            {% endfor %}
+        </ul>
+        به تفکیک دادگان
+        <ul>
+            {% for active_dataset in datasets_features %}
+            <li>مجموعه دادگان: <b>{{active_dataset.active_dataset}}</b></li>
+              <ul>               
+                <li>تعداد رکوردها: {{active_dataset.active_dataset_records}}</li>
+                {% for score, c in active_dataset.score_list.items %}
+                  <li>تعداد رکورد ها با اسکور {{score}}: {{c}}</li>
+                {% endfor %}
+              </ul>
             {% endfor %}
             {% endif %}
         </ul>
