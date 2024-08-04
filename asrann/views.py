@@ -226,7 +226,7 @@ def tagging(request):
         records = Record.objects.filter(~Q(vote__added_by=request.user)).filter(score__lt=SCORE_THRESHOLD).order_by("-score")
         return HttpResponseRedirect(reverse("asrann:vote", args=(records[0].id, )))
     except (IndexError, Record.DoesNotExist, Dataset.DoesNotExist):
-        return HttpResponseRedirect(reverse("asrann:records", args=(dataset.dataset.id, )))
+        return HttpResponseRedirect(reverse(""))
     
 def report(request):
     try:
