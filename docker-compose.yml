@@ -22,6 +22,14 @@ services:
       - STATIC_ROOT=/code/static
     depends_on:
       - db
+  
+  nginx:
+    build: ./nginx
+    restart: on-failure
+    ports:
+      - "80:80"
+    depends_on:
+      - web
 
 volumes:
   db_data:
