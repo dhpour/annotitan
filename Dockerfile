@@ -15,3 +15,4 @@ COPY docker-compose.yml /code/docker-compose.yml
 COPY Dockerfile /code/Dockerfile
 COPY .env /code/.env
 COPY shellutil.py /code/shellutil.py
+COPY static/ /code/static

@@ -12,12 +12,14 @@ services:
     command: python manage.py runserver 0.0.0.0:8530
     volumes:
       - .${MEDIA_VOLUME}:/code${MEDIA_VOLUME}
+      - ./static:/code/static
     ports:
       - "8530:8530"
     environment:
       - POSTGRES_NAME=${DB_NAME}
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASS}
+      - STATIC_ROOT=/code/static
     depends_on:
       - db
 

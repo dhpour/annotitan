@@ -19,6 +19,8 @@ from django.urls import path, include
 from dotenv import load_dotenv
 from django.shortcuts import redirect
 import os
+from django.conf.urls.static import static
+from . import settings
 
 load_dotenv()
 
@@ -26,4 +28,4 @@ urlpatterns = [
     path('', lambda request: redirect('asrann/', permanent=True)),
     path('asrann/', include("asrann.urls")),
     path(os.getenv("ADMIN_ROUTE"), admin.site.urls),
-]
+]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
