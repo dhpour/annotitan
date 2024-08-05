@@ -11,8 +11,9 @@ services:
     build: .
     command: gunicorn anno.wsgi -b :8530
     volumes:
-      - .${MEDIA_VOLUME}:/code${MEDIA_VOLUME}
-      - ./static:/code/static
+      - .:/code
+      #- .${MEDIA_VOLUME}:/code${MEDIA_VOLUME}
+      #- ./static:/code/static
     environment:
       - POSTGRES_NAME=${DB_NAME}
       - POSTGRES_USER=${DB_USER}
