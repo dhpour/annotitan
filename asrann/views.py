@@ -165,13 +165,6 @@ def goto_prev(request, dataset_pk, pk):
         return HttpResponseRedirect(reverse("asrann:record", args=(last_page['dataset'], last_page['record'],)))
     else:
         return HttpResponseRedirect(reverse("asrann:records", args=(dataset_pk,)))
-    
-def test(request):
-    
-    print('DIR: ', os.listdir())
-    print("MEDIA_URL: ", settings.MEDIA_URL)
-    print("MEDIA_URL: ", settings.MEDIA_ROOT)
-    return render(request, "asrann/test.html", {"audio_file": "/asrann/media/0000101109.mp3"})
 
 def serve_audio_from_tar(request, pk):
 

@@ -18,7 +18,7 @@ urlpatterns = [
     path("record/<uuid:pk>/", login_required(views.singleRecord, login_url=LOGIN_URL), name="record"),
     #path("<int:dataset_pk>/record/<int:pk>/next/", login_required(views.goto_next, login_url=LOGIN_URL), name="next_rec"), 
     #path("<int:dataset_pk>/record/<int:pk>/prev/", login_required(views.goto_prev, login_url=LOGIN_URL), name="prev_rec"),
-    path("record/<uuid:pk>/vote/", login_required(views.vote, login_url=LOGIN_URL), name="vote"),    path("tt/", views.test, name="tt"),
+    path("record/<uuid:pk>/vote/", login_required(views.vote, login_url=LOGIN_URL), name="vote"),
     path('record/<uuid:pk>/audio/', login_required(views.serve_audio_from_tar, login_url=LOGIN_URL), name='serve_audio'),
     path('login/', views.sign_in, name='login'),
     path('register/', views.sign_up, name='register'),
