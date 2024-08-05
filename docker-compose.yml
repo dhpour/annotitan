@@ -1,0 +1,26 @@
+services:
+  db:
+    image: postgres
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASS}
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8530
+    volumes:
+      - .${MEDIA_VOLUME}:/code${MEDIA_VOLUME}
+    ports:
+      - "8530:8530"
+    environment:
+      - POSTGRES_NAME=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASS}
+    depends_on:
+      - db
+
+volumes:
+  db_data:
+    driver: local
