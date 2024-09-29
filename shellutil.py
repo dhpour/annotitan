@@ -18,13 +18,13 @@ def load_all_datasets():
 
 def _load_tar_mem(dataset_name):
     dset = Dataset.objects.get(name=dataset_name)
-    path = os.getenv('MEDIA_FOLDER') + dset.data_folder + "/"
+    path = os.path.join(os.getenv('MEDIA_FOLDER'), dset.data_folder)
     for i in tqdm(range(1, len([x for x in os.listdir(path) if x.endswith('.tar')])+1)): 
         tar_file_name = "clips_" + "{:03d}".format(i) + ".tar"
-        tar_file_path = path + tar_file_name
+        tar_file_path = os.path.join( path, tar_file_name)
         tar = tarfile.open(tar_file_path)
         audios = tar.getmembers()
-        #print('tar_file: ', i)
+        print('tar_file: ', i)
         for audio in audios:
             audio_file_name = audio.name
             _tar_map[audio_file_name] = i
@@ -33,7 +33,7 @@ def _load_metadata(dataset_name):
     _load_tar_mem(dataset_name)
     print('tar content files:', len(_tar_map.keys()))
     asrd = Dataset.objects.get(name=dataset_name)
-    file = os.getenv('MEDIA_FOLDER') + asrd.data_folder + "/" + "metadata.csv"
+    file = os.path.join(os.getenv('MEDIA_FOLDER'), asrd.data_folder, "metadata.csv")
     with open(file, encoding="utf-8") as csvfile:
         metadata = csv.reader(csvfile, delimiter='\t')
         now = timezone.now()
