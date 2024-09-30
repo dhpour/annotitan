@@ -28,7 +28,7 @@
         <tr>
          <td>{{ forloop.counter0|add:page_obj.start_index }}</td>
           <td>{{ vote.record.transcription }}</td>
-          <td style="background: {% if vote.vote == 1 %} #28B463 {% else %} #E74C3C {% endif %}"></a></td>
+          <td style="background-color: {% if vote.vote >= 1 %} #28B463 {% else %} #E74C3C {% endif %}"></a></td>
           <td>{{ vote.record.dataset.name }}</td>
           <td>{{vote.vote_date}}</td>
           <td><a href="/asrann/record/{{ vote.record.id }}/">دیدن</a></td>
