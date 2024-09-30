@@ -11,7 +11,8 @@
     <h1>فعالیت شما</h1>
 </div>
 
-<table class="table table-bordered table-hover" style="width: 80%; margin-right: 50px;">
+<div class="table-responsive">
+  <table class="table">
     <thead>
       <tr>
         <th style="text-align: right;">#</th>
@@ -35,7 +36,7 @@
       {% endfor %}
     </tbody>
   </table>
-  
+</div>
    <!--<div>
     {% if all_tagged_by_user %}
         تعداد همه آراء ثبت شده شما: {{ all_tagged_by_user|length }}
@@ -45,22 +46,20 @@
     </div>-->
 
   {% if is_paginated %}
-  <div class="pagination"  style="flex-direction: row; display: flex; margin-right: 50px;">
-    <span class="step-links">
+  <nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center">
         {% if page_obj.has_previous %}
-            <a href="?page=1">&laquo; first</a>
-            <a href="?page={{ page_obj.previous_page_number }}">قبلی</a>
+            <li class="page-item"><a class="page-link" href="?page=1">« اولین</a></li>
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">قبلی</a></li>
         {% endif %}
-
-        <span class="current">
-            صفحه {{ page_obj.number }} از {{ page_obj.paginator.num_pages }}.
-        </span>
-
+        
+        <li class="page-item disabled"><span class="page-link">صفحه {{ page_obj.number }} از {{ page_obj.paginator.num_pages }}</span></li>
+        
         {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.next_page_number }}">بعدی</a>
-            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">بعدی</a></li>
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">آخرین »</a></li>
         {% endif %}
-    </span>
-</div>
+    </ul>
+  </nav>
   {% endif %}
 {% endblock %}

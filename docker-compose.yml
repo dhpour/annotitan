@@ -9,8 +9,8 @@ services:
       - POSTGRES_PASSWORD=${DB_PASS}
   web:
     build: .
-    command: gunicorn anno.wsgi -b :8530
-    #command: python manage.py runserver 0.0.0.0:8530
+    #command: gunicorn anno.wsgi -b :8530
+    command: python manage.py runserver 0.0.0.0:8530
     volumes:
       - .:/code
       #- .${MEDIA_VOLUME}:/code${MEDIA_VOLUME}

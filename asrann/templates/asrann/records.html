@@ -14,7 +14,8 @@
     <h1>مجموعه داده {{ dataset_assigned_records.0.dataset.name }}</h1>
 </div>
 
-<table class="table table-bordered table-hover" style="width: 80%; margin-right: 50px;">
+<div class="table-responsive">
+  <table class="responsive-table">
     <thead>
       <tr>
         <th style="text-align: right;">#</th>
@@ -28,16 +29,17 @@
     <tbody>
       {% for record in dataset_assigned_records %}
         <tr>
-          <td>{{ forloop.counter0|add:page_obj.start_index }}</td>
-          <td>{{ record.transcription }}</td>
-          <td>{{ record.score }}</td>
+          <td data-label="#">{{ forloop.counter0|add:page_obj.start_index }}</td>
+          <td data-label="متن">{{ record.transcription }}</td>
+          <td data-label="امتیاز">{{ record.score }}</td>
           <!--<td>{{ record.dataset.name }}</td>-->
-          <td>{{ record.add_date }}</td>
-          <td><a href="/asrann/record/{{ record.id }}/">دیدن</a></td>
+          <td data-label="مجموعه داده">{{ record.add_date }}</td>
+          <td data-label="دیدن"><a href="/asrann/record/{{ record.id }}/">دیدن</a></td>
         </tr>
       {% endfor %}
     </tbody>
   </table>
+</div>
   
    <!--<div>
     {% if all_tagged_by_user %}

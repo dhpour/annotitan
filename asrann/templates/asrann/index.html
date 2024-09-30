@@ -23,27 +23,27 @@
     <h1>دادگان</h1>
 </div>
 
-<table class="table table-bordered table-hover" style="width: 80%; margin-right: 50px;">
+<table class="responsive-table">
     <thead>
       <tr>
-        <th style="text-align: right;">#</th>
-        <th style="text-align: right;">نام</th>
-        <th style="text-align: right;">نسخه</th>
-        <th style="text-align: right;">پوشه</th>
-        <th style="text-align: right;">تاریخ</th>
-        <th style="text-align: right;">توسط</th>
-      </tr>
+        <th>#</th>
+        <th>نام</th>
+        <th>نسخه</th>
+        <th>پوشه</th>
+        <th>تاریخ</th>
+        <th>توسط</th>
+    </tr>
     </thead>
     <tbody>
       {% for dataset in latest_assigned_datasets %}
-        <tr>
-          <td>{{ forloop.counter0|add:page_obj.start_index }}</td>
-          <td><a href="/asrann/{{ dataset.id }}/">{{ dataset.name }}</a></td>
-          <td>{{ dataset.version }}</td>
-          <td>{{ dataset.data_folder }}</td>
-          <td>{{ dataset.add_date }}</td>
-          <td>{{ dataset.added_by }}</td>
-        </tr>
+      <tr>
+        <td data-label="#">{{ forloop.counter0|add:page_obj.start_index }}</td>
+        <td data-label="نام"><a href="/asrann/{{ dataset.id }}/">{{ dataset.name }}</a></td>
+        <td data-label="نسخه">{{ dataset.version }}</td>
+        <td data-label="پوشه">{{ dataset.data_folder }}</td>
+        <td data-label="تاریخ">{{ dataset.add_date }}</td>
+        <td data-label="توسط">{{ dataset.added_by }}</td>
+    </tr>
       {% endfor %}
     </tbody>
   </table>
