@@ -31,7 +31,7 @@
           <td style="background: {% if vote.vote == 1 %} #28B463 {% else %} #E74C3C {% endif %}"></a></td>
           <td>{{ vote.record.dataset.name }}</td>
           <td>{{vote.vote_date}}</td>
-          <td><a href="/asrann/{{vote.record.dataset.id}}/record/{{ vote.record.id }}/">دیدن</a></td>
+          <td><a href="/asrann/record/{{ vote.record.id }}/">دیدن</a></td>
         </tr>
       {% endfor %}
     </tbody>
