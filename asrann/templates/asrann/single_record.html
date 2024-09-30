@@ -35,7 +35,7 @@
             </p>
             {% endif %}
             <div class="vote-now" style="zoom: 125%; line-height: 16px; display: inline-block;">
-                {% if vote == -1 %}
+                {% if vote <= -1 %}
                 <li>
                 <input type="radio" name="vote" id="downvote" value="down" checked onClick="goToNext('reject');checkVote('reject');">
                 <label for="downvote" style="width: 100%; border-right: 10px solid #E74C3C; text-align: center;">رد</label>
@@ -46,7 +46,7 @@
                 <label for="downvote" style="width: 100%; border-right: 10px solid #E74C3C; text-align: center;">رد</label>
                 </li>
                 {% endif %}
-                {% if vote == 1 %}
+                {% if vote >= 1 %}
                 <li>
                 <input type="radio" name="vote" id="upvote" value="up" checked onClick="goToNext('accept');checkVote('accept');"/>
                 <label for="upvote" style="width: 100%; border-right: 10px solid #28B463; text-align: center;">قبول</label>
