@@ -1,16 +1,15 @@
 {% extends 'base.html' %}
 {% block title %}ورود{% endblock %}
 {% block content %}
-<div style=" text-align: center; vertical-align: middle; bottom: 0px;">
-    <div style="border: 3px solid #eee; border-radius: 10px; padding: 20px; display: inline-block; text-align: center; vertical-align: middle;" id="card-frame">
-        <form method="POST" novalidate>
-            {% csrf_token %}
+<div class="container">
+    <div id="card-frame">
+        <form method="post">
             <h2>ورود</h2>
-            {{form.as_p}}
-            <input type="submit" value="ورود" />
-            <p>حساب کاربری ندارید؟ <a href="/asrann/register">یکی بسازید </a></p>
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="ورود">
+            <p>حساب کاربری ندارید؟ <a href="/asrann/register">یکی بسازید</a></p>
         </form>
     </div>
 </div>
-
-{% endblock content%}
+{% endblock content %}
