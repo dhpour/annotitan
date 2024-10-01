@@ -212,7 +212,7 @@ def sign_in(request):
         form = LoginForm(request.POST)
         
         if form.is_valid():
-            username = form.cleaned_data['username']
+            username = form.cleaned_data['email']
             password = form.cleaned_data['password']
             user = authenticate(request,username=username,password=password)
             if user:
@@ -241,7 +241,7 @@ def sign_up(request):
         form = RegisterForm(request.POST) 
         if form.is_valid():
             user = form.save(commit=False)
-            user.username = user.username.lower()
+            user.username = user.email.lower()
             user.is_active = False
             user.save()
             messages.success(request, 'You have singed up successfully.')
