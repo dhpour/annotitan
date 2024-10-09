@@ -280,7 +280,7 @@ def tagging(request):
         
         #records = Record.objects.filter(~Q(vote__added_by=request.user)).filter(score__lt=SCORE_THRESHOLD, dataset=active.dataset).order_by("-score")
         #record = records[0]
-        records = Record.objects.filter(~Q(vote__added_by=request.user)).filter(score__lt=SCORE_THRESHOLD, dataset=active.dataset)
+        records = Record.objects.filter(~Q(vote__added_by=request.user)).filter(score=0, dataset=active.dataset)
         record = random.choice(records)
         #print('selecting randomly - score: ', record.score)
         return HttpResponseRedirect(reverse("asrann:vote", args=(record.id, )))
