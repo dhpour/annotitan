@@ -278,7 +278,8 @@ def tagging(request):
             record = random.choice(records)
             return HttpResponseRedirect(reverse("asrann:vote", args=(record.id, )))
         
-        records = Record.objects.filter(~Q(vote__added_by=request.user)).filter(score__lt=SCORE_THRESHOLD, dataset=active.dataset).order_by("-score")
+        #records = Record.objects.filter(~Q(vote__added_by=request.user)).filter(score__lt=SCORE_THRESHOLD, dataset=active.dataset).order_by("-score")
+        records = Record.objects.filter(~Q(vote__added_by=request.user)).filter(score__lt=SCORE_THRESHOLD, dataset=active.dataset).order_by("?")
         return HttpResponseRedirect(reverse("asrann:vote", args=(records[0].id, )))
     except (IndexError, Record.DoesNotExist, Dataset.DoesNotExist):
         return redirect('/asrann/')
