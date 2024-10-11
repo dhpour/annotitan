@@ -27,6 +27,7 @@ from django.core.mail import EmailMessage
 from .token import account_activation_token  
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
+import pprint
 
 SCORE_THRESHOLD = 2
 
@@ -346,5 +347,25 @@ def report(request):
         
         return render(request,'asrann/report.html', {'your_records_count': your_records})
     
+    except (IndexError, ActiveDataset.DoesNotExist, Record.DoesNotExist):
+        return HttpResponse('Server error', status=500)
+
+def ureport(request):
+    try:
+        all_votes = Vote.objects.all()
+        user_list = all_votes.values_list(
+            'added_by', 'added_by__username', 'added_by__is_superuser'
+        ).distinct()
+
+        distinct_users = {}
+        for u in user_list:
+            if not u[2] or request.user.is_superuser:
+                distinct_users[u[1]] = Vote.objects.filter(added_by=u[0]).count()
+        context = {
+            'ulist': distinct_users
+        }
+        #for i, x in enumerate(user_list):
+            #print(i, x)
+        return render(request,'asrann/ureport.html', context)
     except (IndexError, ActiveDataset.DoesNotExist, Record.DoesNotExist):
         return HttpResponse('Server error', status=500)

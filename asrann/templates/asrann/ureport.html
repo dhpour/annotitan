@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}
+گزارش کاربران
+{% endblock %}
+
+{% block ureport %}
+<a class="active">
+  گزارش کاربران
+</a>
+{% endblock %}
+
+{% block content %}
+
+<div class="page-heading">
+  <h1>گزارش کاربران</h1>
+</div>
+<div clas="container">
+
+  {% if user.is_staff %}
+  <div class="table-responsive">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>کاربر</th>
+          <th>تعداد رای</th>
+      </tr>
+      </thead>
+      <tbody>
+        {% for u, c in ulist.items %}
+        <tr>
+          <td data-label="کاربر">{{ u }}</td>
+          <td data-label="تعداد رای">{{ c }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <!--<div class="pagination">
+    <span class="step-links">
+        {% if ulist.has_previous %}
+            <a href="?page=1">« first</a>
+            <a href="?page={{ ulist.previous_page_number }}">قبلی</a>
+        {% endif %}
+        <span class="current">
+            صفحه {{ ulist.number }} از {{ ulist.paginator.num_pages }}.
+        </span>
+        {% if ulist.has_next %}
+            <a href="?page={{ ulist.next_page_number }}">بعدی</a>
+            <a href="?page={{ ulist.paginator.num_pages }}">last »</a>
+        {% endif %}
+    </span>
+  </div>-->
+
+  {% endif %}
+</div>
+{% endblock %}

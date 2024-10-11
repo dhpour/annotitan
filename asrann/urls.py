@@ -15,6 +15,7 @@ urlpatterns = [
     path("tagged/", login_required(views.TaggedView.as_view(), login_url=LOGIN_URL), name="tagged"),
     path("tagging/", login_required(views.tagging, login_url=LOGIN_URL), name="tagging"),
     path("report/", login_required(views.report, login_url=LOGIN_URL), name="report"),
+    path("ureport/", staff_member_required(login_required(views.ureport, login_url=LOGIN_URL)), name="ureport"),
     path("record/<uuid:pk>/", login_required(views.singleRecord, login_url=LOGIN_URL), name="record"),
     #path("<int:dataset_pk>/record/<int:pk>/next/", login_required(views.goto_next, login_url=LOGIN_URL), name="next_rec"), 
     #path("<int:dataset_pk>/record/<int:pk>/prev/", login_required(views.goto_prev, login_url=LOGIN_URL), name="prev_rec"),

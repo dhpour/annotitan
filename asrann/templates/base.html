@@ -374,6 +374,11 @@
             {% block report %}
             <a href="/asrann/report/">گزارش</a>
             {% endblock %}
+            {% block ureport %}
+            {% if user.is_staff %}
+            <a href="/asrann/ureport/">گزارش کاربران</a>
+            {% endif %}
+            {% endblock %}
 
             <!--<a href="#">گزارش</a>
             <a href="#">حساب کاربری</a>
