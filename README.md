@@ -27,7 +27,7 @@ ALLOWED_HOSTS='["localhost", "127.0.0.1","0.0.0.0", ]'
 NGINX_CONF='./nginx/local_nginx.conf:/etc/nginx/conf.d/default.conf:ro'
 DEBUG='True'
 ```
-- Put each dataset in a folder in `media` directory in the app root. This dataset folder should consists of archives and metadata file.
+- Put each dataset in a folder in `media` directory in the app root. This dataset folder should consist of archives and metadata file.
 - Run the app with `docker-compose.yml`
 - Start an interactive shell inside `web` container
     - Migrate Django database models
