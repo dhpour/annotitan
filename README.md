@@ -3,7 +3,7 @@ It is a web based Automatic Speech Recognition data verifier by crowd-sourcing a
 
 ## Description
 
-This application is designed for verifing ASR datasets like [Youtube Persian ASR dataset](https://huggingface.co/PerSets/youtube-persian-asr) and [Filimo ASR dataset](https://huggingface.co/PerSets/filimo-persian-asr), but it also can be used for any other similar datasets.
+This application is designed for verifing ASR datasets like [Youtube Persian ASR dataset](https://huggingface.co/PerSets/youtube-persian-asr) and [Filimo ASR dataset](https://huggingface.co/PerSets/filimo-persian-asr), but it can also be used for any other similar datasets.
 
 ## How to Run
 
@@ -33,4 +33,4 @@ DEBUG='True'
     - Migrate Django database models
     - Create django super user
     - In Django shell use `shellutil.py` script to load audio from archives and pair them with metadata in database.
-- `Annotitan` is a self-sufficient app that you can run locally or you can run on the web. If you run it on the web and you would like to verify those users who register for contributing to annotate your data, you should add your `SMTP` email account in the envirenment variables (`.env` file) for user verfication process.
+- `Annotitan` is a self-sufficient app that you can run locally or on the web. If you run it on the web and would like to verify the users who register to contribute to annotating your data, you should add your SMTP email account to the environment variables (`.env` file) for the user verification process.
