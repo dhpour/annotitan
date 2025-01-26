@@ -1,5 +1,5 @@
 # Annotitan
-It is a web based Automatic Speech Recognition data verifier by crowd-sourcing app.
+It is a web-based Automatic Speech Recognition data verifier that uses a crowd-sourcing model.
 
 ## Description
 
@@ -8,7 +8,7 @@ This application is designed for verifing ASR datasets like [Youtube Persian ASR
 ## How to Run
 
 Follow these steps:
-- Add a `.env` file with following key/value pairs to the root of the app.
+- Add a `.env` file with the following key/value pairs to the root of the app.
 ```
 SECRET_KEY=A_LONG_STRING _AS_DJANGO_KEY
 DB_NAME=YOUR_POSTGRESS_DB_NAME
@@ -27,10 +27,10 @@ ALLOWED_HOSTS='["localhost", "127.0.0.1","0.0.0.0", ]'
 NGINX_CONF='./nginx/local_nginx.conf:/etc/nginx/conf.d/default.conf:ro'
 DEBUG='True'
 ```
-- Put each dataset in a folder in `media` directory in the app root. This dataset folder should consist of archives and metadata file.
+- Put each dataset in a folder in `media` directory at the app root. This dataset folder should consist of archives and metadata file.
 - Run the app with `docker-compose.yml`
 - Start an interactive shell inside `web` container
     - Migrate Django database models
     - Create django super user
-    - In Django shell use `shellutil.py` script to load audio from archives and pair them with metadata in database.
+    - In the Django shell use `shellutil.py` script to load audio from archives and pair them with metadata in the database.
 - `Annotitan` is a self-sufficient app that you can run locally or on the web. If you run it on the web and would like to verify the users who register to contribute to annotating your data, you should add your SMTP email account to the environment variables (`.env` file) for the user verification process.
