@@ -24,6 +24,7 @@ EMAIL_PORT=YOUR_EMAIL_PORT
 EMAIL_USER=YOUR_EMAIL_USER
 EMAIL_PASS=YOUR_EMAIL_PASS
 ALLOWED_HOSTS='["localhost", "127.0.0.1","0.0.0.0", ]'
+CSRF_TRUSTED_ORIGINS='[""]'
 NGINX_CONF='./nginx/local_nginx.conf:/etc/nginx/conf.d/default.conf:ro'
 DEBUG='True'
 ```

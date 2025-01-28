@@ -33,7 +33,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = os.getenv('DEBUG', 'False').lower() in ('true')
 
 ALLOWED_HOSTS = json.loads(os.getenv('ALLOWED_HOSTS'))
-CSRF_TRUSTED_ORIGINS = ["https://rizkari.ir"]
+CSRF_TRUSTED_ORIGINS = json.loads(os.getenv('CSRF_TRUSTED_ORIGINS'))
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_USE_TLS = True
