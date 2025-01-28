@@ -28,6 +28,10 @@ from .token import account_activation_token
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
 import pprint
+from dotenv import load_dotenv
+
+load_dotenv()
+SPLIT_PREFIX = os.getenv('SPLIT_PREFIX')
 
 SCORE_THRESHOLD = 2
 
@@ -171,7 +175,7 @@ def serve_audio_from_tar(request, pk):
 
     try:
         record = Record.objects.get(id=pk)
-        tar_file_string_name = "clips_" + "{:03d}".format(record.tar_file) + ".tar"
+        tar_file_string_name = "data/" + SPLIT_PREFIX + "_" + "{:03d}".format(record.tar_file) + ".tar"
         dataset_folder = record.dataset.data_folder
         tar_file_path = settings.MEDIA_ROOT + dataset_folder + "/" + tar_file_string_name
         audio_file_name = record.audio_file
