@@ -33,4 +33,4 @@ DEBUG='True'
     - Migrate Django database models
     - Create django super user
     - In the Django shell use `shellutil.py` script to load audio from archives and pair them with metadata in the database.
-- `Annotitan` is a self-sufficient app that you can run locally or on the web. If you run it on the web and would like to verify the users who register to contribute to annotating your data, you should add your SMTP email account to the environment variables (`.env` file) for the user verification process.
+- `AnnoTitan` is a self-sufficient app that you can run locally or on the web. If you run it on the web and would like to verify the users who register to contribute to annotating your data, you should add your SMTP email account to the environment variables (`.env` file) for the user verification process.
