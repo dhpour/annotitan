@@ -5,7 +5,7 @@ It is a web-based Automatic Speech Recognition data verifier that uses a crowd-s
 
 This application is designed for verifing ASR datasets like [Youtube Persian ASR dataset](https://huggingface.co/PerSets/youtube-persian-asr) and [Filimo ASR dataset](https://huggingface.co/PerSets/filimo-persian-asr), but it can also be used for any other similar datasets.
 
-## How to Run
+## Start up the app
 
 Follow these steps:
 - Add a `.env` file with the following key/value pairs to the root of the app.
@@ -85,5 +85,8 @@ SPLIT_PREFIX=unvalidated
     ```
     - Now go to the app page `localhost`. You should see following page.
     ![alt text](image.png)
-    
+
+## Run locally or on the web
 - `AnnoTitan` is a self-sufficient app that you can run locally or on the web. If you run it on the web and would like to verify the users who register to contribute to annotating your data, you should add your SMTP email account to the environment variables (`.env` file) for the user verification process.
+
+## How to use
