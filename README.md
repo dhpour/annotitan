@@ -1,4 +1,4 @@
-# Annotitan
+# AnnoTitan
 It is a web-based Automatic Speech Recognition data verifier that uses a crowd-sourcing model.
 
 ## Description
