@@ -32,6 +32,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 SPLIT_PREFIX = os.getenv('SPLIT_PREFIX')
+USE_EMAIL_VERIFICATION = os.getenv('USE_EMAIL_VERIFICATION', 'False').lower() in ('true')
 
 SCORE_THRESHOLD = 2
 
@@ -247,30 +248,36 @@ def sign_up(request):
         if form.is_valid():
             user = form.save(commit=False)
             user.username = user.email.lower()
-            user.is_active = False
+            user.is_active = not USE_EMAIL_VERIFICATION
             user.save()
-            messages.success(request, 'You have singed up successfully.')
-            #login(request, user)
-            #return redirect('/asrann/')
-            current_site = get_current_site(request)  
-            mail_subject = 'Activation link has been sent to your email id'  
-            message = render_to_string('asrann/acc_active_email.html', {  
-                'user': user,  
-                'domain': current_site.domain,  
-                'uid':urlsafe_base64_encode(force_bytes(user.pk)),  
-                'token':account_activation_token.make_token(user),  
-            })  
-            to_email = form.cleaned_data.get('email')  
-            email = EmailMessage(  
-                        mail_subject,
-                        message, 
-                        'ravazi.noreply@gmail.com', 
-                        [to_email]
-            )
-            print('\temail:', message)
-            email.send()  
-            #return HttpResponse('Please confirm your email address to complete the registration')
-            return HttpResponse("<div style='direction: rtl'><p>ایمیلی برای شما ارسال شده است. برای استفاده از حساب کاربری‌تان  باید ایمیل‌تان را تایید کنید.</p><a href='/asrann'>وارد شوید</a></div>")
+
+            if USE_EMAIL_VERIFICATION:
+                messages.success(request, 'You have singed up successfully.')
+                #login(request, user)
+                #return redirect('/asrann/')
+                current_site = get_current_site(request)  
+                mail_subject = 'Activation link has been sent to your email id'  
+                message = render_to_string('asrann/acc_active_email.html', {  
+                    'user': user,  
+                    'domain': current_site.domain,  
+                    'uid':urlsafe_base64_encode(force_bytes(user.pk)),  
+                    'token':account_activation_token.make_token(user),  
+                })  
+                to_email = form.cleaned_data.get('email')  
+                email = EmailMessage(  
+                            mail_subject,
+                            message, 
+                            'ravazi.noreply@gmail.com', 
+                            [to_email]
+                )
+                print('\temail:', message)
+                email.send()  
+                #return HttpResponse('Please confirm your email address to complete the registration')
+                return HttpResponse("<div style='direction: rtl'><p>ایمیلی برای شما ارسال شده است. برای استفاده از حساب کاربری‌تان  باید ایمیل‌تان را تایید کنید.</p><a href='/asrann'>وارد شوید</a></div>")
+            else:
+                return HttpResponse("<div style='direction: rtl'><p>تبریک! حساب کاربری شما با موفقیت ساخته شد.</p><a href='/asrann/login'>وارد شوید</a></div>")
+
+
         else:
             return render(request, 'asrann/register.html', {'form': form})
         
@@ -278,8 +285,10 @@ def tagging(request):
     
     try:
         active = get_object_or_404(ActiveDataset.objects.order_by('?')[:1])
+        print(active)
         if not request.user.customuser.user_tested:
             records = Record.objects.filter(score__gte=SCORE_THRESHOLD)
+            print(records)
             record = random.choice(records)
             return HttpResponseRedirect(reverse("asrann:vote", args=(record.id, )))
         
