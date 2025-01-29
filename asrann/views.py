@@ -34,7 +34,7 @@ load_dotenv()
 SPLIT_PREFIX = os.getenv('SPLIT_PREFIX')
 USE_EMAIL_VERIFICATION = os.getenv('USE_EMAIL_VERIFICATION', 'False').lower() in ('true')
 
-SCORE_THRESHOLD = 2
+SCORE_THRESHOLD = int(os.getenv('SCORE_THRESHOLD'))
 
 
 class IndexView(generic.ListView):
