@@ -3,7 +3,7 @@ It is a web-based Automatic Speech Recognition data verifier that uses a crowd-s
 
 ## Description
 
-This application is designed for verifing ASR datasets like [Youtube Persian ASR dataset](https://huggingface.co/PerSets/youtube-persian-asr) and [Filimo ASR dataset](https://huggingface.co/PerSets/filimo-persian-asr), but it can also be used for any other similar datasets.
+This application is designed for verifing ASR datasets like [Youtube Persian ASR dataset](https://huggingface.co/datasets/PerSets/youtube-persian-asr) and [Filimo ASR dataset](https://huggingface.co/datasets/PerSets/filimo-persian-asr), but it can also be used for any other similar datasets.
 
 ## Start the app
 
